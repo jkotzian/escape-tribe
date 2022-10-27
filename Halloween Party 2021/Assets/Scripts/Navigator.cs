@@ -163,11 +163,11 @@ public class Navigator : MonoBehaviour
         intersection_10.initialize(10, null, intersection_9, null, intersection_19);
         intersection_11.initialize(11, intersection_4, null, intersection_12, null);
         intersection_12.initialize(12, null, intersection_11, null, null);
-        intersection_13.initialize(13, intersection_15, null, intersection_14, null);
+        intersection_13.initialize(13, intersection_5, null, intersection_14, null);
         intersection_14.initialize(14, null, intersection_13, intersection_15, intersection_24);
         intersection_15.initialize(15, intersection_6, intersection_14, intersection_16, null);
         intersection_16.initialize(16, intersection_7, intersection_15, null, null);
-        intersection_17.initialize(17, intersection_8, null, intersection_18, intersection_28);
+        intersection_17.initialize(17, intersection_8, null, intersection_18, null);
         intersection_18.initialize(18, intersection_9, intersection_17, null, intersection_28);
         intersection_19.initialize(19, intersection_10, null, intersection_20, intersection_29);
         intersection_20.initialize(20, null, intersection_19, intersection_21, intersection_39);
@@ -246,6 +246,12 @@ public class Navigator : MonoBehaviour
         updateUI();
     }
 
+    public void turnAround()
+    {
+        current_intersection.moveToIntersection(current_intersection.getForwardDirection());
+        updateUI();
+    }
+
     void updateUI()
     {
         if (current_intersection == null)
@@ -317,7 +323,7 @@ public class Navigator : MonoBehaviour
         current_intersection_text.text = current_intersection.getID().ToString();
     }
 
-    public void foundFuse()
+    public void foundGoal()
     {
         fuses_found++;
         fuses_found_text.text = fuses_found.ToString() + "/" + goal_fuses.ToString();

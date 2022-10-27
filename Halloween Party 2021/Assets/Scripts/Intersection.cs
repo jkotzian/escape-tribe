@@ -16,7 +16,7 @@ public class Intersection
     Intersection right_intersection;
     Intersection back_intersection;
 
-    bool is_fuse = false;
+    bool is_goal = false;
     bool seen_before = false;
 
     // Start is called before the first frame update
@@ -50,7 +50,7 @@ public class Intersection
         if (back_intersection != null)
             num_available_directions++;
         if (num_available_directions == 1)
-            is_fuse = true;
+            is_goal = true;
     }
 
     public void moveToIntersection(Direction n_approached_direction)
@@ -59,8 +59,8 @@ public class Intersection
         if (seen_before == false)
         {
             seen_before = true;
-            if (is_fuse)
-                Navigator.S.foundFuse();
+            if (is_goal)
+                Navigator.S.foundGoal();
         }
 
         // Update the relative directional intersections

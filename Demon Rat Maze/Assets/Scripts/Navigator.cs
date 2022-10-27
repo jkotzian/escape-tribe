@@ -61,6 +61,8 @@ public class Navigator : MonoBehaviour
     public AudioClip success_stinger_sound;
     public AudioClip splash_sound;
     public AudioClip scream_sound;
+    public AudioClip bell_sound;
+    public AudioClip door_sound;
 
     Intersection intersection_1;
     Intersection intersection_2;
@@ -454,7 +456,8 @@ public class Navigator : MonoBehaviour
     IEnumerator completeMazeHelper()
     {
         controls_parent.SetActive(false);
-        yield return new WaitForSeconds(1f);
+        GameManager.S.playSound(door_sound);
+        yield return new WaitForSeconds(3f);
         goToMazeSuccess();
     }
 
@@ -558,6 +561,7 @@ public class Navigator : MonoBehaviour
     {
         hideAllOverlayScreens();
         success_screen.gameObject.SetActive(true);
+        GameManager.S.playSound(bell_sound);
         StartCoroutine(restartMazeGameWithDelay(60));
     }
 

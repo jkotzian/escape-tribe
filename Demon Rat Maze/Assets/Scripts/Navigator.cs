@@ -24,6 +24,7 @@ public class Navigator : MonoBehaviour
     public Image landmark_image;
     public GameObject bite_marks_1;
     public GameObject bite_marks_2;
+    public Text meat_number_text;
 
     Intersection current_intersection;
     public Text current_intersection_text;
@@ -124,6 +125,7 @@ public class Navigator : MonoBehaviour
     public Sprite goal_sprite;
 
     bool started_gameplay = false;
+    bool discovering_meat = false;
 
     public GameObject main_menu_screen;
     public GameObject tutorial_screen_1;
@@ -204,6 +206,7 @@ public class Navigator : MonoBehaviour
 
         intersection_1.initialize(1, null, null, intersection_2, intersection_6, null);
         intersection_2.initialize(2, null, intersection_1, null, null, null);
+        intersection_2.goal_number = 4;
         intersection_3.initialize(3, null, null, intersection_4, intersection_8, null);
         intersection_4.initialize(4, null, intersection_3, intersection_5, intersection_11, null);
         intersection_5.initialize(5, null, intersection_4, intersection_6, intersection_13, statue_sprite);
@@ -214,6 +217,7 @@ public class Navigator : MonoBehaviour
         intersection_10.initialize(10, null, intersection_9, null, intersection_19, null);
         intersection_11.initialize(11, intersection_4, null, intersection_12, null, null);
         intersection_12.initialize(12, null, intersection_11, null, null, null);
+        intersection_12.goal_number = 3;
         intersection_13.initialize(13, intersection_5, null, intersection_14, null, null);
         intersection_14.initialize(14, null, intersection_13, intersection_15, intersection_24, null);
         intersection_15.initialize(15, intersection_6, intersection_14, intersection_16, null, null);
@@ -232,6 +236,7 @@ public class Navigator : MonoBehaviour
         intersection_28.initialize(28, intersection_18, intersection_27, intersection_29, intersection_37, torch_sprite);
         intersection_29.initialize(29, intersection_19, intersection_28, null, intersection_38, null);
         intersection_30.initialize(30, intersection_31, null, null, null, null);
+        intersection_30.goal_number = 1;
         intersection_31.initialize(31, intersection_21, null, intersection_32, intersection_30, null);
         intersection_32.initialize(32, intersection_22, intersection_31, intersection_33, intersection_42, null);
         intersection_33.initialize(33, null, intersection_32, null, intersection_46, null);
@@ -250,9 +255,12 @@ public class Navigator : MonoBehaviour
         intersection_46.initialize(46, intersection_33, null, intersection_47, intersection_45, null);
         intersection_47.initialize(47, intersection_34, intersection_46, null, null, null);
         intersection_48.initialize(48, null, null, intersection_49, null, null);
+        intersection_48.goal_number = 5;
         intersection_49.initialize(49, intersection_35, intersection_48, null, null, null);
         intersection_50.initialize(50, intersection_36, null, null, null, null);
+        intersection_50.goal_number = 2;
         intersection_51.initialize(51, intersection_40, null, null, null, null);
+
 
 
         current_intersection = intersection_51;
@@ -340,7 +348,7 @@ public class Navigator : MonoBehaviour
     {
         life--;
         life_text.text = "LIFE: " + life.ToString();
-        if (life == 0)
+        if (life == 0 && !discovering_meat)
         {
             dead = true;
             GameManager.S.playSound(scream_sound);
@@ -445,6 +453,7 @@ public class Navigator : MonoBehaviour
         {
             bite_marks_1.SetActive(false);
             bite_marks_2.SetActive(false);
+            meat_number_text.gameObject.SetActive(false);
         }
     }
 
@@ -462,16 +471,19 @@ public class Navigator : MonoBehaviour
     }
 
 
-    public void foundMeat(bool seen_before)
+    public void foundMeat(bool seen_before, int goal_number)
     {
-        StartCoroutine(foundMeatHelper(seen_before));
+        StartCoroutine(foundMeatHelper(seen_before, goal_number));
     }
 
-    IEnumerator foundMeatHelper(bool seen_before)
+    IEnumerator foundMeatHelper(bool seen_before, int goal_number)
     {
         if (!seen_before)
         {
+            discovering_meat = true;
             meat_found++;
+            meat_number_text.text = goal_number.ToString();
+            meat_number_text.gameObject.SetActive(true);
             yield return new WaitForSeconds(.5f);
             bite_marks_1.SetActive(true);
             GameManager.S.playSound(biting_flesh_sound);
@@ -491,6 +503,7 @@ public class Navigator : MonoBehaviour
             }
             life = max_life;
             life_text.text = "LIFE: " + life.ToString();
+            discovering_meat = false;
         }
         else
         {

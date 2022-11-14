@@ -19,14 +19,10 @@ public class Intersection
 
     bool is_goal = false;
     bool seen_before = false;
+    public int goal_number = 0;
 
     Sprite landmark;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     public void initialize(int n_id, Intersection n_north_intersection, Intersection n_west_intersection, 
                            Intersection n_east_intersection, Intersection n_south_intersection, Sprite n_landmark)
@@ -65,7 +61,7 @@ public class Intersection
         if (is_goal)
         {
             landmark = Navigator.S.getGoalSprite();
-            Navigator.S.foundMeat(seen_before);
+            Navigator.S.foundMeat(seen_before, goal_number);
         }
         if (!seen_before)
         {
